@@ -1,4 +1,5 @@
 using Domain;
+using FluentValidation;
 using MediatR;
 using Persistence;
 
@@ -9,6 +10,13 @@ namespace Application.Scenarios
     public class Command : IRequest
     {
       public Scenario Scenario { get; set; }
+    }
+    public class CommandValidator : AbstractValidator<Command>
+    {
+      public CommandValidator()
+      {
+        RuleFor(x => x.Scenario).SetValidator(new ScenarioValidator());
+      }
     }
     public class Handler : IRequestHandler<Command>
     {
