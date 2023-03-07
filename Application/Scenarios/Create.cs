@@ -1,3 +1,4 @@
+using Application.Core;
 using Domain;
 using FluentValidation;
 using MediatR;
@@ -7,7 +8,7 @@ namespace Application.Scenarios
 {
   public class Create
   {
-    public class Command : IRequest
+    public class Command : IRequest<Result<Unit>>
     {
       public Scenario Scenario { get; set; }
     }
@@ -18,18 +19,18 @@ namespace Application.Scenarios
         RuleFor(x => x.Scenario).SetValidator(new ScenarioValidator());
       }
     }
-    public class Handler : IRequestHandler<Command>
+    public class Handler : IRequestHandler<Command, Result<Unit>>
     {
       private readonly DataContext _context;
       public Handler(DataContext context)
       {
         _context = context;
       }
-      public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
+      public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
       {
         _context.Scenarios.Add(request.Scenario);
         await _context.SaveChangesAsync();
-        return Unit.Value;
+        return Result<Unit>.Success(Unit.Value);
       }
     }
   }
