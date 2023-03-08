@@ -10,5 +10,7 @@ namespace Domain
     public string BPCycle { get; set; }
     public string File { get; set; }
     public bool IsCancelled { get; set; }
+    public ICollection<ScenarioAttendee> Attendees { get; set; }
+
   }
 }

@@ -11,5 +11,21 @@ namespace Persistence
     }
 
     public DbSet<Scenario> Scenarios { get; set; }
+    public DbSet<ScenarioAttendee> ScenarioAttendees { get; set; }
+    protected override void OnModelCreating(ModelBuilder builder)
+    {
+      base.OnModelCreating(builder);
+      builder.Entity<ScenarioAttendee>(x => x.HasKey(sa => new { sa.AppUserId, sa.ScenarioId }));
+      builder.Entity<ScenarioAttendee>()
+        .HasOne(u => u.AppUser)
+        .WithMany(u => u.Scenarios)
+        .HasForeignKey(sa => sa.AppUserId);
+
+      builder.Entity<ScenarioAttendee>()
+        .HasOne(s => s.Scenario)
+        .WithMany(s => s.Attendees)
+        .HasForeignKey(sa => sa.ScenarioId);
+    }
+
   }
 }
