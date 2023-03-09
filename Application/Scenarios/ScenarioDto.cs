@@ -1,6 +1,9 @@
-namespace Domain
+using Application.Profiles;
+using Domain;
+
+namespace Application.Scenarios
 {
-  public class Scenario
+  public class ScenarioDto
   {
     public Guid Id { get; set; }
     public string Title { get; set; }
@@ -10,7 +13,7 @@ namespace Domain
     public string BPCycle { get; set; }
     public string File { get; set; }
     public bool IsCancelled { get; set; }
-    public ICollection<ScenarioAttendee> Attendees { get; set; } = new List<ScenarioAttendee>();
-
+    public string HostUsername { get; set; }
+    public ICollection<Profile> Attendees { get; set; }
   }
 }
