@@ -1,6 +1,7 @@
 using Application.Core;
 using Application.Scenarios;
 using Domain;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers
@@ -22,6 +23,7 @@ namespace API.Controllers
     {
       return HandleResult(await Mediator.Send(new Create.Command { Scenario = scenario }));
     }
+    [Authorize(Policy = "IsScenarioHost")]
     [HttpPut("{id}")]
     public async Task<IActionResult> EditScenario(Scenario scenario, Guid id)
     {
