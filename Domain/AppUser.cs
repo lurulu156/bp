@@ -10,6 +10,8 @@ namespace Domain
     public string Bio { get; set; }
     public ICollection<ScenarioAttendee> Scenarios { get; set; }
     public ICollection<Photo> Photos { get; set; }
+    public ICollection<UserFollowing> Followings { get; set; }
+    public ICollection<UserFollowing> Followers { get; set; }
 
   }
 }
