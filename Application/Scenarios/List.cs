@@ -2,17 +2,18 @@ using Application.Core;
 using Application.Interfaces;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
-using Domain;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using Persistence;
 
 namespace Application.Scenarios
 {
   public class List
   {
-    public class Query : IRequest<Result<List<ScenarioDto>>> { }
-    public class Handler : IRequestHandler<Query, Result<List<ScenarioDto>>>
+    public class Query : IRequest<Result<PagedList<ScenarioDto>>>
+    {
+      public PagingParams Params { get; set; }
+    }
+    public class Handler : IRequestHandler<Query, Result<PagedList<ScenarioDto>>>
     {
       private readonly DataContext _context;
       private readonly IMapper _mapper;
@@ -23,13 +24,16 @@ namespace Application.Scenarios
         _context = context;
         _userAccessor = userAccessor;
       }
-      public async Task<Result<List<ScenarioDto>>> Handle(Query request, CancellationToken cancellationToken)
+      public async Task<Result<PagedList<ScenarioDto>>> Handle(Query request, CancellationToken cancellationToken)
       {
-        var scenarios = await _context.Scenarios
-          .ProjectTo<ScenarioDto>(_mapper.ConfigurationProvider, new {currentUsername = _userAccessor.GetUsername()})
-          .ToListAsync();
+        var query = _context.Scenarios
+          .OrderBy(d => d.DueDate)
+          .ProjectTo<ScenarioDto>(_mapper.ConfigurationProvider, new { currentUsername = _userAccessor.GetUsername() })
+          .AsQueryable();
 
-        return Result<List<ScenarioDto>>.Success(scenarios);
+
+        return Result<PagedList<ScenarioDto>>.Success(await PagedList<ScenarioDto>
+          .CreateAsync(query, request.Params.PageNumber, request.Params.PageSize));
       }
     }
   }

@@ -9,9 +9,9 @@ namespace API.Controllers
   public class ScenariosController : BaseApiController
   {
     [HttpGet]
-    public async Task<IActionResult> GetScenarios()
+    public async Task<IActionResult> GetScenarios([FromQuery] PagingParams param)
     {
-      return HandleResult(await Mediator.Send(new List.Query()));
+      return HandlePagedResult(await Mediator.Send(new List.Query { Params = param }));
     }
     [HttpGet("{id}")]
     public async Task<IActionResult> GetScenario(Guid id)
