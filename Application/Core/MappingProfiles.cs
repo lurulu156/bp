@@ -1,11 +1,12 @@
 using Application.Comments;
+using Application.Profiles;
 using Application.Scenarios;
 using AutoMapper;
 using Domain;
 
 namespace Application.Core
 {
-  public class MappingProfiles : Profile
+  public class MappingProfiles : AutoMapper.Profile
   {
     public MappingProfiles()
     {
@@ -35,6 +36,14 @@ namespace Application.Core
       .ForMember(d => d.Username, s => s.MapFrom(o => o.Author.UserName))
       .ForMember(d => d.DisplayName, s => s.MapFrom(o => o.Author.DisplayName))
       .ForMember(d => d.Image, s => s.MapFrom(o => o.Author.Photos.FirstOrDefault(x => x.IsMain).Url));
+
+      CreateMap<ScenarioAttendee, UserScenarioDto>()
+      .ForMember(d => d.Id, s => s.MapFrom(o => o.Scenario.Id))
+      .ForMember(d => d.DueDate, s => s.MapFrom(o => o.Scenario.DueDate))
+      .ForMember(d => d.Title, s => s.MapFrom(o => o.Scenario.Title))
+      .ForMember(d => d.Category, s => s.MapFrom(o => o.Scenario.Category))
+      .ForMember(d => d.BPCycle, s => s.MapFrom(o => o.Scenario.BPCycle))
+      .ForMember(d => d.HostUsername, s => s.MapFrom(o => o.Scenario.Attendees.FirstOrDefault(x => x.isHost).AppUser.UserName));
 
     }
   }
