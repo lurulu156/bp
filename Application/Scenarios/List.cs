@@ -1,4 +1,5 @@
 using Application.Core;
+using Application.Interfaces;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Domain;
@@ -15,15 +16,17 @@ namespace Application.Scenarios
     {
       private readonly DataContext _context;
       private readonly IMapper _mapper;
-      public Handler(DataContext context, IMapper mapper)
+      private readonly IUserAccessor _userAccessor;
+      public Handler(DataContext context, IMapper mapper, IUserAccessor userAccessor)
       {
         _mapper = mapper;
         _context = context;
+        _userAccessor = userAccessor;
       }
       public async Task<Result<List<ScenarioDto>>> Handle(Query request, CancellationToken cancellationToken)
       {
         var scenarios = await _context.Scenarios
-          .ProjectTo<ScenarioDto>(_mapper.ConfigurationProvider)
+          .ProjectTo<ScenarioDto>(_mapper.ConfigurationProvider, new {currentUsername = _userAccessor.GetUsername()})
           .ToListAsync();
 
         return Result<List<ScenarioDto>>.Success(scenarios);

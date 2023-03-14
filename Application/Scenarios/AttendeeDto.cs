@@ -8,6 +8,9 @@ namespace Application.Scenarios
     public string Image { get; set; }
     public string Department { get; set; }
     public string Title { get; set; }
+    public bool Following { get; set; }
+    public int FollowersCount { get; set; }
+    public int FollowingCount { get; set; }
 
   }
 }
