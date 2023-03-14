@@ -9,7 +9,7 @@ namespace API.Controllers
   public class ScenariosController : BaseApiController
   {
     [HttpGet]
-    public async Task<IActionResult> GetScenarios([FromQuery] PagingParams param)
+    public async Task<IActionResult> GetScenarios([FromQuery] ScenarioParams param)
     {
       return HandlePagedResult(await Mediator.Send(new List.Query { Params = param }));
     }

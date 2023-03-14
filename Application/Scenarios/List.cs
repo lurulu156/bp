@@ -11,7 +11,7 @@ namespace Application.Scenarios
   {
     public class Query : IRequest<Result<PagedList<ScenarioDto>>>
     {
-      public PagingParams Params { get; set; }
+      public ScenarioParams Params { get; set; }
     }
     public class Handler : IRequestHandler<Query, Result<PagedList<ScenarioDto>>>
     {
@@ -27,10 +27,20 @@ namespace Application.Scenarios
       public async Task<Result<PagedList<ScenarioDto>>> Handle(Query request, CancellationToken cancellationToken)
       {
         var query = _context.Scenarios
+          .Where(x => x.DueDate >= request.Params.StartDate)
           .OrderBy(d => d.DueDate)
           .ProjectTo<ScenarioDto>(_mapper.ConfigurationProvider, new { currentUsername = _userAccessor.GetUsername() })
           .AsQueryable();
 
+        if (request.Params.IsAttend && !request.Params.IsHost)
+        {
+          query = query.Where(x => x.Attendees.Any(x => x.Username == _userAccessor.GetUsername()));
+        }
+
+        if (!request.Params.IsAttend && request.Params.IsHost)
+        {
+          query = query.Where(x => x.HostUsername == _userAccessor.GetUsername()); 
+        }
 
         return Result<PagedList<ScenarioDto>>.Success(await PagedList<ScenarioDto>
           .CreateAsync(query, request.Params.PageNumber, request.Params.PageSize));
