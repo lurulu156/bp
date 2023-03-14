@@ -12,6 +12,7 @@ namespace Persistence
 
     public DbSet<Scenario> Scenarios { get; set; }
     public DbSet<ScenarioAttendee> ScenarioAttendees { get; set; }
+    public DbSet<Photo> Photos { get; set; }
     protected override void OnModelCreating(ModelBuilder builder)
     {
       base.OnModelCreating(builder);
