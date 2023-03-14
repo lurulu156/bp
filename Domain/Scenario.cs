@@ -11,6 +11,7 @@ namespace Domain
     public string File { get; set; }
     public bool IsCancelled { get; set; }
     public ICollection<ScenarioAttendee> Attendees { get; set; } = new List<ScenarioAttendee>();
+    public ICollection<Comment> Comments { get; set; } = new List<Comment>();
 
   }
 }
