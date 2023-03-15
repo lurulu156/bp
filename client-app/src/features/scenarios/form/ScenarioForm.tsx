@@ -6,9 +6,10 @@ interface Props {
   scenario: Scenario | undefined;
   closeForm: () => void;
   createOrEdit: (scenario: Scenario) => void;
+  submitting: boolean;
 }
 
-export default function ActivityForm({ scenario: selectedScenario, closeForm, createOrEdit }: Props) {
+export default function ActivityForm({ scenario: selectedScenario, closeForm, createOrEdit, submitting }: Props) {
 
   const initialState = selectedScenario ?? {
     id: '',
@@ -37,10 +38,10 @@ export default function ActivityForm({ scenario: selectedScenario, closeForm, cr
         <Form.Input placeholder='Title' value={scenario.title} name='title' onChange={handleInputChange} />
         <Form.TextArea placeholder='Description' value={scenario.description} name='description' onChange={handleInputChange} />
         <Form.Input placeholder='Category' value={scenario.category} name='category' onChange={handleInputChange} />
-        <Form.Input placeholder='DueDate' value={scenario.dueDate} name='dueDate' onChange={handleInputChange} />
-        <Form.Input placeholder='BPCycle' value={scenario.bpCycle} name='BPCycle' onChange={handleInputChange} />
+        <Form.Input placeholder='DueDate' type='date' value={scenario.dueDate} name='dueDate' onChange={handleInputChange} />
+        <Form.Input placeholder='BPCycle' defaultValue={scenario.bpCycle} name='BPCycle' onChange={handleInputChange} />
         <Form.Input placeholder='File' value={scenario.file} name='file' onChange={handleInputChange} />
-        <Button floated='right' positive type='submit' content='Submit' />
+        <Button loading={submitting} floated='right' positive type='submit' content='Submit' />
         <Button onClick={closeForm} floated='right' type='button' content='Cancel' />
       </Form>
     </Segment>

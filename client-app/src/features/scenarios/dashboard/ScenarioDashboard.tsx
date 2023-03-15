@@ -15,11 +15,12 @@ interface Props {
   editMode: boolean;
   createOrEdit: (scenario: Scenario) => void;
   deleteScenario: (id: string) => void;
+  submitting: boolean;
 }
 
 
 export default function ActivityDashboard({ scenarios, selectedScenario, selectScenario,
-  cancelSelectScenario, openForm, closeForm, editMode, createOrEdit, deleteScenario }: Props) {
+  cancelSelectScenario, openForm, closeForm, editMode, createOrEdit, deleteScenario, submitting }: Props) {
   return (
     <Grid>
       <Grid.Column width='10'>
@@ -27,6 +28,7 @@ export default function ActivityDashboard({ scenarios, selectedScenario, selectS
           scenarios={scenarios}
           selectScenario={selectScenario}
           deleteScenario={deleteScenario}
+          submitting={submitting}
         />
       </Grid.Column>
       <Grid.Column width='6'>
@@ -40,7 +42,8 @@ export default function ActivityDashboard({ scenarios, selectedScenario, selectS
           <ScenarioForm
             closeForm={closeForm}
             scenario={selectedScenario}
-            createOrEdit={createOrEdit} />}
+            createOrEdit={createOrEdit}
+            submitting={submitting} />}
       </Grid.Column>
 
     </Grid>

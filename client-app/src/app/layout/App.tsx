@@ -1,20 +1,29 @@
 import { useEffect, useState } from 'react';
-import axios from 'axios';
 import { Scenario } from '../models/scenario';
 import { Container } from 'semantic-ui-react';
 import NavBar from './NavBar';
 import ScenarioDashboard from '../../features/scenarios/dashboard/ScenarioDashboard';
 import { v4 as uuid } from 'uuid';
+import agent from '../api/agent';
+import LoadingComponent from './LoadingComponent';
 
 function App() {
   const [scenarios, setScenarios] = useState<Scenario[]>([]);
   const [selectedScenario, setSelectedScenario] = useState<Scenario | undefined>(undefined);
   const [editMode, setEditMode] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
-    axios.get<Scenario[]>('http://localhost:5000/api/v0/scenarios')
+    agent.Scenarios.list()
       .then(response => {
-        setScenarios(response.data);
+        let scenarios: Scenario[] = [];
+        response.forEach(scenario => {
+          scenario.dueDate = scenario.dueDate.split('T')[0];
+          scenarios.push(scenario);
+        })
+        setScenarios(scenarios)
+        setLoading(false);
       })
   }, [])
 
@@ -36,17 +45,35 @@ function App() {
   }
 
   function handleDeleteScenario(id: string) {
-    setScenarios([...scenarios.filter(x => x.id !== id)])
+    setSubmitting(true);
+    agent.Scenarios.delete(id).then(() => {
+      setScenarios([...scenarios.filter(x => x.id !== id)])
+      setSubmitting(false);
+    })
   }
 
   function handleCreateOrEditActivity(scenario: Scenario) {
-    scenario.id
-      ? setScenarios([...scenarios.filter(x => x.id !== scenario.id), scenario])
-      : setScenarios([...scenarios, { ...scenario, id: uuid() }]);
-    setEditMode(false);
-    setSelectedScenario(scenario);
+    setSubmitting(true);
+    if (scenario.id) {
+      agent.Scenarios.update(scenario).then(() => {
+        setScenarios([...scenarios.filter(x => x.id !== scenario.id), scenario]);
+        setSelectedScenario(scenario);
+        setEditMode(false);
+        setSubmitting(false);
+      })
+    } else {
+      scenario.id = uuid();
+      agent.Scenarios.create(scenario).then(() => {
+        setScenarios([...scenarios, scenario]);
+        setSelectedScenario(scenario);
+        setEditMode(false);
+        setSubmitting(false);
+      })
+    }
+
   }
 
+  if (loading) return <LoadingComponent content='Loading app...' />
 
   return (
     <>
@@ -62,6 +89,7 @@ function App() {
           closeForm={handleFormClose}
           createOrEdit={handleCreateOrEditActivity}
           deleteScenario={handleDeleteScenario}
+          submitting={submitting}
         />
       </Container>
     </>
