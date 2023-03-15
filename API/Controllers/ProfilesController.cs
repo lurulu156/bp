@@ -15,6 +15,11 @@ namespace API.Controllers
     {
       return HandleResult(await Mediator.Send(new ListScenario.Query { Username = username, Predicate = predicate }));
     }
+    [HttpPut]
+    public async Task<IActionResult> Edit(Profile profile)
+    {
+      return HandleResult(await Mediator.Send(new Edit.Command { Profile = profile }));
+    }
 
   }
 }
