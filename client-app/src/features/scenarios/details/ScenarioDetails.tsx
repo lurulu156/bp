@@ -1,14 +1,11 @@
 import { Button, Card, Image } from "semantic-ui-react";
-import { Scenario } from "../../../app/models/scenario";
+import LoadingComponent from "../../../app/layout/LoadingComponent";
+import { useStore } from "../../../app/stores/store";
 
-interface Props {
-  scenario: Scenario;
-  cancelSelectScenario: () => void;
-  openForm: (id: string) => void;
-}
-
-
-export default function ActivityDetails({ scenario, cancelSelectScenario, openForm }: Props) {
+export default function ScenarioDetails() {
+  const { scenarioStore } = useStore();
+  const { selectedScenario: scenario, openForm, cancelSelectScenario } = scenarioStore;
+  if (!scenario) return <LoadingComponent />;
   return (
     <Card fluid>
       <Image src={`/assets/categoryImages/${scenario.category}.jpg`} />

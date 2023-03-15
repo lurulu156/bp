@@ -1,16 +1,11 @@
 import { ChangeEvent, useState } from "react";
 import { Button, Form, Segment } from "semantic-ui-react";
-import { Scenario } from "../../../app/models/scenario";
+import { useStore } from "../../../app/stores/store";
+import { observer } from "mobx-react-lite";
 
-interface Props {
-  scenario: Scenario | undefined;
-  closeForm: () => void;
-  createOrEdit: (scenario: Scenario) => void;
-  submitting: boolean;
-}
-
-export default function ActivityForm({ scenario: selectedScenario, closeForm, createOrEdit, submitting }: Props) {
-
+export default observer(function ScenarioForm() {
+  const { scenarioStore } = useStore();
+  const { selectedScenario, closeForm, createScenario, updateScenario, loading } = scenarioStore
   const initialState = selectedScenario ?? {
     id: '',
     title: '',
@@ -24,7 +19,7 @@ export default function ActivityForm({ scenario: selectedScenario, closeForm, cr
   const [scenario, setScenario] = useState(initialState);
 
   function handleSubmit() {
-    createOrEdit(scenario);
+    scenario.id ? updateScenario(scenario) : createScenario(scenario);
   }
 
   function handleInputChange(event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
@@ -41,9 +36,9 @@ export default function ActivityForm({ scenario: selectedScenario, closeForm, cr
         <Form.Input placeholder='DueDate' type='date' value={scenario.dueDate} name='dueDate' onChange={handleInputChange} />
         <Form.Input placeholder='BPCycle' defaultValue={scenario.bpCycle} name='BPCycle' onChange={handleInputChange} />
         <Form.Input placeholder='File' value={scenario.file} name='file' onChange={handleInputChange} />
-        <Button loading={submitting} floated='right' positive type='submit' content='Submit' />
+        <Button loading={loading} floated='right' positive type='submit' content='Submit' />
         <Button onClick={closeForm} floated='right' type='button' content='Cancel' />
       </Form>
     </Segment>
   )
-}
+})

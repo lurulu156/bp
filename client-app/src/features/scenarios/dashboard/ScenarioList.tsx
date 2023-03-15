@@ -1,15 +1,11 @@
 import { SyntheticEvent, useState } from "react";
 import { Button, Item, Label, Segment } from "semantic-ui-react";
-import { Scenario } from "../../../app/models/scenario";
+import { useStore } from "../../../app/stores/store";
+import { observer } from 'mobx-react-lite';
 
-interface Props {
-    scenarios: Scenario[];
-    selectScenario: (id: string) => void;
-    deleteScenario: (id: string) => void;
-    submitting: boolean;
-}
-
-export default function ActivityList({ scenarios, selectScenario, deleteScenario, submitting }: Props) {
+export default observer(function ActivityList() {
+    const { scenarioStore } = useStore();
+    const { deleteScenario, scenariosByDate, loading } = scenarioStore;
     const [target, setTarget] = useState('');
 
     function handleDeleteActivity(e: SyntheticEvent<HTMLButtonElement>, id: string) {
@@ -20,7 +16,7 @@ export default function ActivityList({ scenarios, selectScenario, deleteScenario
     return (
         <Segment>
             <Item.Group divided>
-                {scenarios.map(scenario => (
+                {scenariosByDate.map(scenario => (
                     <Item key={scenario.id}>
                         <Item.Content>
                             <Item.Header as='a'>{scenario.title}</Item.Header>
@@ -31,9 +27,9 @@ export default function ActivityList({ scenarios, selectScenario, deleteScenario
                             </Item.Description>
                             <Item.Extra>
                                 <Button floated='right' content='View' color='blue'
-                                    onClick={() => selectScenario(scenario.id)} />
+                                    onClick={() => scenarioStore.selectScenario(scenario.id)} />
                                 <Button floated='right' content='Delete' color='red'
-                                    loading={submitting && target === scenario.id}
+                                    loading={loading && target === scenario.id}
                                     name={scenario.id}
                                     onClick={(e) => handleDeleteActivity(e, scenario.id)} />
                                 <Label basic content={scenario.category} />
@@ -44,4 +40,4 @@ export default function ActivityList({ scenarios, selectScenario, deleteScenario
             </Item.Group>
         </Segment>
     )
-}
+})

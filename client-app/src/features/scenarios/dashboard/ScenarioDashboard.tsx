@@ -1,51 +1,24 @@
 import { Grid } from "semantic-ui-react";
-import { Scenario } from "../../../app/models/scenario";
+import { useStore } from "../../../app/stores/store";
 import ScenarioDetails from "../details/ScenarioDetails";
 import ScenarioForm from "../form/ScenarioForm";
 import ScenarioList from "./ScenarioList";
+import { observer } from "mobx-react-lite";
 
-
-interface Props {
-  scenarios: Scenario[];
-  selectedScenario: Scenario | undefined;
-  selectScenario: (id: string) => void;
-  cancelSelectScenario: () => void;
-  openForm: (id: string) => void;
-  closeForm: () => void;
-  editMode: boolean;
-  createOrEdit: (scenario: Scenario) => void;
-  deleteScenario: (id: string) => void;
-  submitting: boolean;
-}
-
-
-export default function ActivityDashboard({ scenarios, selectedScenario, selectScenario,
-  cancelSelectScenario, openForm, closeForm, editMode, createOrEdit, deleteScenario, submitting }: Props) {
+export default observer(function ScenarioDashboard() {
+  const { scenarioStore } = useStore();
+  const { selectedScenario, editMode } = scenarioStore;
   return (
     <Grid>
       <Grid.Column width='10'>
-        <ScenarioList
-          scenarios={scenarios}
-          selectScenario={selectScenario}
-          deleteScenario={deleteScenario}
-          submitting={submitting}
-        />
+        <ScenarioList />
       </Grid.Column>
       <Grid.Column width='6'>
         {selectedScenario && !editMode &&
-          <ScenarioDetails
-            scenario={selectedScenario}
-            cancelSelectScenario={cancelSelectScenario}
-            openForm={openForm}
-          />}
+          <ScenarioDetails />}
         {editMode &&
-          <ScenarioForm
-            closeForm={closeForm}
-            scenario={selectedScenario}
-            createOrEdit={createOrEdit}
-            submitting={submitting} />}
+          <ScenarioForm />}
       </Grid.Column>
-
     </Grid>
   )
-}
+})
