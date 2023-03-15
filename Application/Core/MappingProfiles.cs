@@ -45,6 +45,10 @@ namespace Application.Core
       .ForMember(d => d.BPCycle, s => s.MapFrom(o => o.Scenario.BPCycle))
       .ForMember(d => d.HostUsername, s => s.MapFrom(o => o.Scenario.Attendees.FirstOrDefault(x => x.isHost).AppUser.UserName));
 
+      CreateMap<Profiles.Profile, AppUser>()
+      .ForMember(d => d.UserName, o => o.Ignore())
+      .ForMember(d => d.Photos, o => o.Ignore());
+
     }
   }
 }
