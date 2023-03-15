@@ -1,12 +1,18 @@
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { Button, Form, Segment } from "semantic-ui-react";
 import { useStore } from "../../../app/stores/store";
 import { observer } from "mobx-react-lite";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { v4 as uuid } from 'uuid';
+import LoadingComponent from "../../../app/layout/LoadingComponent";
 
 export default observer(function ScenarioForm() {
   const { scenarioStore } = useStore();
-  const { selectedScenario, closeForm, createScenario, updateScenario, loading } = scenarioStore
-  const initialState = selectedScenario ?? {
+  const { selectedScenario, createScenario, updateScenario, loading, loadScenario, loadingInitial } = scenarioStore;
+  const { id } = useParams();
+  const navigate = useNavigate();
+
+  const [scenario, setScenario] = useState({
     id: '',
     title: '',
     category: '',
@@ -14,18 +20,27 @@ export default observer(function ScenarioForm() {
     dueDate: '',
     bpCycle: '',
     file: ''
-  }
+  });
 
-  const [scenario, setScenario] = useState(initialState);
+  useEffect(() => {
+    if (id) loadScenario(id).then(scenario => setScenario(scenario!));
+  }, [id, loadScenario]);
 
   function handleSubmit() {
-    scenario.id ? updateScenario(scenario) : createScenario(scenario);
+    if (!scenario.id) {
+      scenario.id = uuid();
+      createScenario(scenario).then(() => navigate(`/scenarios/${scenario.id}`))
+    } else {
+      updateScenario(scenario).then(() => navigate(`/scenarios/${scenario.id}`))
+    }
   }
 
   function handleInputChange(event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) {
     const { name, value } = event.target;
     setScenario({ ...scenario, [name]: value })
   }
+
+  if (loadingInitial) return <LoadingComponent content='Loading scenario...' />
 
   return (
     <Segment clearing>
@@ -37,7 +52,7 @@ export default observer(function ScenarioForm() {
         <Form.Input placeholder='BPCycle' defaultValue={scenario.bpCycle} name='BPCycle' onChange={handleInputChange} />
         <Form.Input placeholder='File' value={scenario.file} name='file' onChange={handleInputChange} />
         <Button loading={loading} floated='right' positive type='submit' content='Submit' />
-        <Button onClick={closeForm} floated='right' type='button' content='Cancel' />
+        <Button as={Link} to='/scenarios' floated='right' type='button' content='Cancel' />
       </Form>
     </Segment>
   )

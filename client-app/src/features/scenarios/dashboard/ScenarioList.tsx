@@ -2,13 +2,14 @@ import { SyntheticEvent, useState } from "react";
 import { Button, Item, Label, Segment } from "semantic-ui-react";
 import { useStore } from "../../../app/stores/store";
 import { observer } from 'mobx-react-lite';
+import { Link } from "react-router-dom";
 
-export default observer(function ActivityList() {
+export default observer(function ScenarioList() {
     const { scenarioStore } = useStore();
     const { deleteScenario, scenariosByDate, loading } = scenarioStore;
     const [target, setTarget] = useState('');
 
-    function handleDeleteActivity(e: SyntheticEvent<HTMLButtonElement>, id: string) {
+    function handleDeleteScenario(e: SyntheticEvent<HTMLButtonElement>, id: string) {
         setTarget(e.currentTarget.name);
         deleteScenario(id);
     }
@@ -27,11 +28,11 @@ export default observer(function ActivityList() {
                             </Item.Description>
                             <Item.Extra>
                                 <Button floated='right' content='View' color='blue'
-                                    onClick={() => scenarioStore.selectScenario(scenario.id)} />
+                                    as={Link} to={`/scenarios/${scenario.id}`} />
                                 <Button floated='right' content='Delete' color='red'
                                     loading={loading && target === scenario.id}
                                     name={scenario.id}
-                                    onClick={(e) => handleDeleteActivity(e, scenario.id)} />
+                                    onClick={(e) => handleDeleteScenario(e, scenario.id)} />
                                 <Label basic content={scenario.category} />
                             </Item.Extra>
                         </Item.Content>

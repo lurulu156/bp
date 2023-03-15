@@ -8,7 +8,7 @@ export default class ScenarioStore {
   selectedScenario?: Scenario = undefined;
   editMode = false;
   loading = false;
-  loadingInitial = true;
+  loadingInitial = false;
 
   constructor() {
     makeAutoObservable(this)
@@ -19,14 +19,22 @@ export default class ScenarioStore {
       Date.parse(a.dueDate) - Date.parse(b.dueDate))
   }
 
+  private setScenario = (scenario: Scenario) => {
+    scenario.dueDate = scenario.dueDate.split('T')[0];
+    this.scenarioRegistry.set(scenario.id, scenario);
+  }
+
+  private getScenario = (id: string) => {
+    return this.scenarioRegistry.get(id);
+  }
+
   loadScenarios = async () => {
+    this.setLoadingInitial(true);
     try {
       const scenarios = await agent.Scenarios.list();
       scenarios.forEach(scenario => {
         scenario.dueDate = scenario.dueDate.split('T')[0];
-        runInAction(() => {
-          this.scenarioRegistry.set(scenario.id, scenario);
-        })
+        this.setScenario(scenario);
       })
       this.setLoadingInitial(false);
     } catch (error) {
@@ -35,25 +43,29 @@ export default class ScenarioStore {
     }
   }
 
+  loadScenario = async (id: string) => {
+    let scenario = this.getScenario(id);
+    if (scenario) {
+      this.selectedScenario = scenario;
+      return scenario;
+    }
+    else {
+      this.setLoadingInitial(true);
+      try {
+        scenario = await agent.Scenarios.details(id);
+        this.setScenario(scenario);
+        runInAction(() => this.selectedScenario = scenario);
+        this.setLoadingInitial(false);
+        return scenario;
+      } catch (error) {
+        console.log(error);
+        this.setLoadingInitial(false);
+      }
+    }
+  }
+
   setLoadingInitial = (state: boolean) => {
     this.loadingInitial = state;
-  }
-
-  selectScenario = (id: string) => {
-    this.selectedScenario = this.scenarioRegistry.get(id);
-  }
-
-  cancelSelectScenario = () => {
-    this.selectedScenario = undefined;
-  }
-
-  openForm = (id?: string) => {
-    id ? this.selectScenario(id) : this.cancelSelectScenario();
-    this.editMode = true;
-  }
-
-  closeForm = () => {
-    this.editMode = false;
   }
 
   createScenario = async (scenario: Scenario) => {
