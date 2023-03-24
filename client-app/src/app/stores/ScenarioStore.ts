@@ -8,7 +8,7 @@ export default class ScenarioStore {
   selectedScenario?: Scenario = undefined;
   editMode = false;
   loading = false;
-  loadingInitial = false;
+  loadingInitial = true;
 
   constructor() {
     makeAutoObservable(this)
@@ -17,6 +17,19 @@ export default class ScenarioStore {
   get scenariosByDate() {
     return Array.from(this.scenarioRegistry.values()).sort((a, b) =>
       Date.parse(a.dueDate) - Date.parse(b.dueDate))
+  }
+
+  get groupedScenarios(): [string, Scenario[]][] {
+    const sortedScenarios = Array.from(this.scenarioRegistry.values()).sort((a, b) =>
+      Date.parse(a.dueDate) - Date.parse(b.dueDate));
+
+    return Object.entries(
+      sortedScenarios.reduce((scenarios, scenario) => {
+        const bpCycle = scenario.bpCycle
+        scenarios[bpCycle] = scenarios[bpCycle] ? [...scenarios[bpCycle], scenario] : [scenario];
+        return scenarios;
+      }, {} as { [key: string]: Scenario[] })
+    )
   }
 
   private setScenario = (scenario: Scenario) => {

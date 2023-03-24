@@ -1,44 +1,25 @@
-import { SyntheticEvent, useState } from "react";
-import { Button, Item, Label, Segment } from "semantic-ui-react";
+import { Fragment } from "react";
+import { Header } from "semantic-ui-react";
 import { useStore } from "../../../app/stores/store";
 import { observer } from 'mobx-react-lite';
-import { Link } from "react-router-dom";
+import ScenarioListItem from "./ScenarioListItem";
 
 export default observer(function ScenarioList() {
     const { scenarioStore } = useStore();
-    const { deleteScenario, scenariosByDate, loading } = scenarioStore;
-    const [target, setTarget] = useState('');
-
-    function handleDeleteScenario(e: SyntheticEvent<HTMLButtonElement>, id: string) {
-        setTarget(e.currentTarget.name);
-        deleteScenario(id);
-    }
+    const { groupedScenarios } = scenarioStore;
 
     return (
-        <Segment>
-            <Item.Group divided>
-                {scenariosByDate.map(scenario => (
-                    <Item key={scenario.id}>
-                        <Item.Content>
-                            <Item.Header as='a'>{scenario.title}</Item.Header>
-                            <Item.Meta>{scenario.dueDate}</Item.Meta>
-                            <Item.Description>
-                                <div>{scenario.description}</div>
-                                <div>{scenario.bpCycle}, {scenario.category}</div>
-                            </Item.Description>
-                            <Item.Extra>
-                                <Button floated='right' content='View' color='blue'
-                                    as={Link} to={`/scenarios/${scenario.id}`} />
-                                <Button floated='right' content='Delete' color='red'
-                                    loading={loading && target === scenario.id}
-                                    name={scenario.id}
-                                    onClick={(e) => handleDeleteScenario(e, scenario.id)} />
-                                <Label basic content={scenario.category} />
-                            </Item.Extra>
-                        </Item.Content>
-                    </Item>
-                ))}
-            </Item.Group>
-        </Segment>
+        <>
+            {groupedScenarios.map(([group, scenarios]) => (
+                <Fragment key={group}>
+                    <Header sub color='teal'>
+                        {group}
+                    </Header>
+                    {scenarios && scenarios.map(scenario => (
+                        <ScenarioListItem key={scenario.id} scenario={scenario} />
+                    ))}
+                </Fragment>
+            ))}
+        </>
     )
 })

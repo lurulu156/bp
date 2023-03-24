@@ -4,6 +4,7 @@ import ScenarioList from "./ScenarioList";
 import { observer } from "mobx-react-lite";
 import { useEffect } from "react";
 import LoadingComponent from "../../../app/layout/LoadingComponent";
+import ScenarioFilters from "./ScenarioFilters";
 
 export default observer(function ScenarioDashboard() {
   const { scenarioStore } = useStore();
@@ -21,7 +22,7 @@ export default observer(function ScenarioDashboard() {
         <ScenarioList />
       </Grid.Column>
       <Grid.Column width='6'>
-        <h2>Scenario filters</h2>
+        <ScenarioFilters />
       </Grid.Column>
     </Grid>
   )
