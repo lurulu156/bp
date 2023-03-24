@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { Item, Button, Icon, Segment } from "semantic-ui-react";
 import { Scenario } from "../../../app/models/scenario";
+import { format } from "date-fns";
 
 interface Props {
   scenario: Scenario
@@ -22,7 +23,7 @@ export default function ScenarioListItem({ scenario }: Props) {
       </Segment>
       <Segment>
         <span>
-          <Icon name='clock' />{`${scenario.dueDate} `}
+          <Icon name='clock' />{`${format(scenario.dueDate!, 'dd MMM yyyy h:mm aa') } `}
           <Icon name='flag' />{`${scenario.category} `}
           <Icon name='file alternate' />{`${scenario.file} `}
         </span>

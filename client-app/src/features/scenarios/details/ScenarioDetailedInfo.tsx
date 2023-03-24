@@ -1,6 +1,7 @@
 import { observer } from 'mobx-react-lite';
 import { Segment, Grid, Icon } from 'semantic-ui-react'
 import { Scenario } from '../../../app/models/scenario';
+import { format } from 'date-fns';
 
 interface Props {
   scenario: Scenario
@@ -26,7 +27,7 @@ export default observer(function ScenarioDetailedInfo({ scenario }: Props) {
           </Grid.Column>
           <Grid.Column width={15}>
             <span>
-              {scenario.dueDate}
+              {format(scenario.dueDate!, 'dd MMM yyyy h:mm aa')}
             </span>
           </Grid.Column>
         </Grid>

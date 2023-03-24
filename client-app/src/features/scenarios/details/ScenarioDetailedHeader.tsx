@@ -1,6 +1,8 @@
 import { observer } from 'mobx-react-lite';
 import { Button, Header, Item, Segment, Image } from 'semantic-ui-react'
 import { Scenario } from '../../../app/models/scenario';
+import { format } from 'date-fns';
+import { Link } from 'react-router-dom';
 
 const scenarioImageStyle = {
   filter: 'brightness(30%)'
@@ -33,7 +35,7 @@ export default observer(function ScenarioDetailedHeader({ scenario }: Props) {
                   content={scenario.title}
                   style={{ color: 'white' }}
                 />
-                <p>{scenario.dueDate}</p>
+                <p>{format(scenario.dueDate!, 'dd MMM yyyy')}</p>
                 <p>
                   Hosted by <strong>Bob</strong>
                 </p>
@@ -45,7 +47,7 @@ export default observer(function ScenarioDetailedHeader({ scenario }: Props) {
       <Segment clearing attached='bottom'>
         <Button color='teal'>Join Scenario</Button>
         <Button>Cancel attendance</Button>
-        <Button color='orange' floated='right'>
+        <Button as={Link} to={`/manage/${scenario.id}`} color='orange' floated='right'>
           Manage Scenario
         </Button>
       </Segment>

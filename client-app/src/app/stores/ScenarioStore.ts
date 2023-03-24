@@ -16,7 +16,7 @@ export default class ScenarioStore {
 
   get scenariosByDate() {
     return Array.from(this.scenarioRegistry.values()).sort((a, b) =>
-      Date.parse(a.dueDate) - Date.parse(b.dueDate))
+      a.dueDate!.getTime() - b.dueDate!.getTime());
   }
 
   get groupedScenarios(): [string, Scenario[]][] {
@@ -30,7 +30,7 @@ export default class ScenarioStore {
   }
 
   private setScenario = (scenario: Scenario) => {
-    scenario.dueDate = scenario.dueDate.split('T')[0];
+    scenario.dueDate = new Date(scenario.dueDate!);
     this.scenarioRegistry.set(scenario.id, scenario);
   }
 
@@ -43,7 +43,6 @@ export default class ScenarioStore {
     try {
       const scenarios = await agent.Scenarios.list();
       scenarios.forEach(scenario => {
-        scenario.dueDate = scenario.dueDate.split('T')[0];
         this.setScenario(scenario);
       })
       this.setLoadingInitial(false);

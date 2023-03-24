@@ -1,7 +1,7 @@
 
 import { createContext, useContext } from "react";
 import CommonStore from "./commonStore";
-import ScenarioStore from "./ScenarioStore";
+import ScenarioStore from "./scenarioStore";
 
 interface Store {
   scenarioStore: ScenarioStore,

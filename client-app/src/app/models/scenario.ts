@@ -4,7 +4,7 @@ export interface Scenario {
   title: string;
   description: string;
   category: string;
-  dueDate: string;
+  dueDate: Date | null;
   bpCycle: string;
   file: string;
 }
