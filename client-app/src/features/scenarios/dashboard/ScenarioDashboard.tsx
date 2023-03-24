@@ -14,7 +14,7 @@ export default observer(function ScenarioDashboard() {
     if (scenarioRegistry.size <= 1) loadScenarios();
   }, [loadScenarios, scenarioRegistry.size])
 
-  if (scenarioStore.loadingInitial) return <LoadingComponent content='Loading app...' />
+  if (scenarioStore.loadingInitial) return <LoadingComponent content='Loading scenarios...' />
 
   return (
     <Grid>

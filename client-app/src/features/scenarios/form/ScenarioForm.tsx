@@ -8,11 +8,11 @@ import LoadingComponent from "../../../app/layout/LoadingComponent";
 import { Scenario } from "../../../app/models/scenario";
 import * as Yup from 'yup';
 import { Formik, Form } from 'formik';
-import MyTextInput from "../../../common/form/MyTextInput";
-import MyTextAreaInput from "../../../common/form/MyTextArea";
-import MySelectInput from "../../../common/form/MySelectInput";
-import MyDateInput from "../../../common/form/MyDateInput";
-import { categoryOptions } from "../../../common/options/categoryOptions";
+import MyTextInput from "../../../app/common/form/MyTextInput";
+import MyTextAreaInput from "../../../app/common/form/MyTextArea";
+import MySelectInput from "../../../app/common/form/MySelectInput";
+import { categoryOptions } from "../../../app/common/options/categoryOptions";
+import MyDateInput from "../../../app/common/form/MyDateInput";
 
 export default observer(function ScenarioForm() {
   const { scenarioStore } = useStore();

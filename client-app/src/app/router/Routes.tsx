@@ -5,6 +5,7 @@ import TestErrors from "../../features/errors/TestError";
 import ScenarioDashboard from "../../features/scenarios/dashboard/ScenarioDashboard";
 import ScenarioDetails from "../../features/scenarios/details/ScenarioDetails";
 import ScenarioForm from "../../features/scenarios/form/ScenarioForm";
+import LoginForm from "../../features/users/LoginForm";
 import App from "../layout/App";
 
 export const routes: RouteObject[] = [
@@ -16,6 +17,7 @@ export const routes: RouteObject[] = [
       { path: 'scenarios/:id', element: <ScenarioDetails /> },
       { path: 'createScenario', element: <ScenarioForm key='create' /> },
       { path: 'manage/:id', element: <ScenarioForm key='manage' /> },
+      { path: 'login', element: <LoginForm /> },
       { path: 'errors', element: <TestErrors /> },
       { path: 'not-found', element: <NotFound /> },
       { path: 'server-error', element: <ServerError /> },
