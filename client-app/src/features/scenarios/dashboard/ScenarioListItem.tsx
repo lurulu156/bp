@@ -6,7 +6,7 @@ interface Props {
   scenario: Scenario
 }
 
-export default function ActivityListItem({ scenario }: Props) {
+export default function ScenarioListItem({ scenario }: Props) {
   return (
     <Segment.Group>
       <Segment>
@@ -33,7 +33,7 @@ export default function ActivityListItem({ scenario }: Props) {
         <span>{scenario.description}</span>
         <Button
           as={Link}
-          to={`/activities/${scenario.id}`}
+          to={`/scenarios/${scenario.id}`}
           color='teal'
           floated='right'
           content='View'

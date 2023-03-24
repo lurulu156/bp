@@ -8,7 +8,7 @@ import LoadingComponent from "../../../app/layout/LoadingComponent";
 
 export default observer(function ScenarioForm() {
   const { scenarioStore } = useStore();
-  const { selectedScenario, createScenario, updateScenario, loading, loadScenario, loadingInitial } = scenarioStore;
+  const { createScenario, updateScenario, loading, loadScenario, loadingInitial } = scenarioStore;
   const { id } = useParams();
   const navigate = useNavigate();
 

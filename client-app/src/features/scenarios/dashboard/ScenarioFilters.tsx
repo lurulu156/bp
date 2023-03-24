@@ -6,7 +6,7 @@ export default function ScenarioFilters() {
     <>
       <Menu vertical size='large' style={{ width: '100%', marginTop: 25 }}>
         <Header icon='filter' attached color='teal' content='Filters' />
-        <Menu.Item content='All Events' />
+        <Menu.Item content='All Scenarios' />
         <Menu.Item content="I'm attending" />
         <Menu.Item content="I'm hosting" />
       </Menu>
