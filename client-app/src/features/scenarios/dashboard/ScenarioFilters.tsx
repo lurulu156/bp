@@ -11,7 +11,7 @@ export default function ScenarioFilters() {
         <Menu.Item content="I'm hosting" />
       </Menu>
       <Header icon='calendar' attached color='teal' content='Select date' />
-      <Calendar />
+      <Calendar locale="en-GB" />
     </>
   );
 }
