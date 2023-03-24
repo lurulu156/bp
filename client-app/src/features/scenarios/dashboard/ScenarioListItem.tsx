@@ -22,8 +22,9 @@ export default function ScenarioListItem({ scenario }: Props) {
       </Segment>
       <Segment>
         <span>
-          <Icon name='clock' /> {scenario.dueDate}
-          <Icon name='marker' /> {scenario.file}
+          <Icon name='clock' />{`${scenario.dueDate} `}
+          <Icon name='flag' />{`${scenario.category} `}
+          <Icon name='file alternate' />{`${scenario.file} `}
         </span>
       </Segment>
       <Segment secondary>

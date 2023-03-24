@@ -12,8 +12,8 @@ export default observer(function ScenarioList() {
         <>
             {groupedScenarios.map(([group, scenarios]) => (
                 <Fragment key={group}>
-                    <Header sub color='teal'>
-                        {group}
+                    <Header color='teal'>
+                        Cycle {group}
                     </Header>
                     {scenarios && scenarios.map(scenario => (
                         <ScenarioListItem key={scenario.id} scenario={scenario} />

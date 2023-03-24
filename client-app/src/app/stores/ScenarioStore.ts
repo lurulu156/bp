@@ -20,11 +20,8 @@ export default class ScenarioStore {
   }
 
   get groupedScenarios(): [string, Scenario[]][] {
-    const sortedScenarios = Array.from(this.scenarioRegistry.values()).sort((a, b) =>
-      Date.parse(a.dueDate) - Date.parse(b.dueDate));
-
     return Object.entries(
-      sortedScenarios.reduce((scenarios, scenario) => {
+      this.scenariosByDate.reduce((scenarios, scenario) => {
         const bpCycle = scenario.bpCycle
         scenarios[bpCycle] = scenarios[bpCycle] ? [...scenarios[bpCycle], scenario] : [scenario];
         return scenarios;

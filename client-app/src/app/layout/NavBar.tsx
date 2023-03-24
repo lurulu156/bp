@@ -10,6 +10,7 @@ export default function NavBar() {
           Business Process
         </Menu.Item>
         <Menu.Item as={NavLink} to='/scenarios' name='Scenario' />
+        <Menu.Item as={NavLink} to='/errors' name='Errors' />
         <Menu.Item>
           <Button as={NavLink} to='/createScenario' positive content='Create Scenario' />
         </Menu.Item>
