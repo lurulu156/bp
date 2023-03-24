@@ -1,7 +1,8 @@
 import { Link } from "react-router-dom";
-import { Item, Button, Icon, Segment } from "semantic-ui-react";
+import { Item, Button, Icon, Segment, Label } from "semantic-ui-react";
 import { Scenario } from "../../../app/models/scenario";
 import { format } from "date-fns";
+import ScenarioListItemAttendee from "./ScenarioListItemAttendee";
 
 interface Props {
   scenario: Scenario
@@ -15,8 +16,24 @@ export default function ScenarioListItem({ scenario }: Props) {
           <Item>
             <Item.Image size='tiny' circular src='/assets/user.png' />
             <Item.Content>
-              <Item.Header as='a'>{scenario.title}</Item.Header>
-              <Item.Description>Hosted by Bob</Item.Description>
+              <Item.Header as={Link} to={`/scenarios/${scenario.id}`}>
+                {scenario.title}
+              </Item.Header>
+              <Item.Description>Hosted by {scenario.host?.displayName}</Item.Description>
+              {scenario.isHost && (
+                <Item.Description>
+                  <Label basic color='orange'>
+                    You are hosting this scenario!
+                  </Label>
+                </Item.Description>
+              )}
+              {scenario.isGoing && !scenario.isHost && (
+                <Item.Description>
+                  <Label basic color='green'>
+                    You are attending to this scenario!
+                  </Label>
+                </Item.Description>
+              )}
             </Item.Content>
           </Item>
         </Item.Group>
@@ -29,7 +46,7 @@ export default function ScenarioListItem({ scenario }: Props) {
         </span>
       </Segment>
       <Segment secondary>
-        Attendees go here
+        <ScenarioListItemAttendee attendees={scenario.attendees!} />
       </Segment>
       <Segment clearing>
         <span>{scenario.description}</span>

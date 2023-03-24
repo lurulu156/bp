@@ -29,7 +29,7 @@ export default observer(function ScenarioDetails() {
         <ScenarioDetailedChat />
       </Grid.Column>
       <Grid.Column width='6'>
-        <ScenarioDetailedSidebar />
+        <ScenarioDetailedSidebar scenario={scenario}/>
       </Grid.Column>
     </Grid>
   )

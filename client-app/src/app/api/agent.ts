@@ -1,5 +1,5 @@
 import axios, { AxiosError, AxiosResponse } from "axios";
-import { Scenario } from "../models/scenario";
+import { Scenario, ScenarioFormValues } from "../models/scenario";
 import { router } from "../router/Routes";
 import { toast } from 'react-toastify';
 import { store } from "../stores/store";
@@ -75,9 +75,10 @@ const requests = {
 const Scenarios = {
   list: () => requests.get<Scenario[]>(`/scenarios`),
   details: (id: string) => requests.get<Scenario>(`/scenarios/${id}`),
-  create: (scenario: Scenario) => requests.post<void>(`/scenarios`, scenario),
-  update: (scenario: Scenario) => requests.put<void>(`/scenarios/${scenario.id}`, scenario),
-  delete: (id: string) => requests.del<void>(`/scenarios/${id}`)
+  create: (scenario: ScenarioFormValues) => requests.post<void>(`/scenarios`, scenario),
+  update: (scenario: ScenarioFormValues) => requests.put<void>(`/scenarios/${scenario.id}`, scenario),
+  delete: (id: string) => requests.del<void>(`/scenarios/${id}`),
+  attend: (id: string) => requests.post<void>(`/scenarios/${id}/attend`, {})
 }
 
 const agent = {

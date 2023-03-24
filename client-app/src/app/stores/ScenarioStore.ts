@@ -1,7 +1,9 @@
 import { makeAutoObservable, runInAction } from "mobx";
 import agent from "../api/agent";
 import { v4 as uuid } from 'uuid';
-import { Scenario } from "../models/scenario";
+import { Scenario, ScenarioFormValues } from "../models/scenario";
+import { store } from "./store";
+import { Profile } from "../models/profile";
 
 export default class ScenarioStore {
   scenarioRegistry = new Map<string, Scenario>();
@@ -30,6 +32,14 @@ export default class ScenarioStore {
   }
 
   private setScenario = (scenario: Scenario) => {
+    const user = store.userStore.user;
+    if (user) {
+      scenario.isGoing = scenario.attendees!.some(
+        a => a.username === user.username
+      );
+      scenario.isHost = scenario.hostUsername === user.username;
+      scenario.host = scenario.attendees?.find(x => x.username === scenario.hostUsername);
+    }
     scenario.dueDate = new Date(scenario.dueDate!);
     this.scenarioRegistry.set(scenario.id, scenario);
   }
@@ -77,36 +87,34 @@ export default class ScenarioStore {
     this.loadingInitial = state;
   }
 
-  createScenario = async (scenario: Scenario) => {
-    this.loading = true;
-    scenario.id = uuid();
+  createScenario = async (scenario: ScenarioFormValues) => {
+    const user = store.userStore!.user;
+    const profile = new Profile(user!);
     try {
       await agent.Scenarios.create(scenario);
-      runInAction(() => {
-        this.scenarioRegistry.set(scenario.id, scenario);
-        this.selectedScenario = scenario;
-        this.editMode = false;
-        this.loading = false;
-      })
+      const newScenario = new Scenario(scenario);
+      newScenario.hostUsername = user!.username;
+      newScenario.attendees = [profile];
+      this.setScenario(newScenario);
+      runInAction(() => this.selectedScenario = newScenario);
     } catch (error) {
       console.log(error);
-      runInAction(() => this.loading = false);
     }
   }
 
-  updateScenario = async (scenario: Scenario) => {
+  updateScenario = async (scenario: ScenarioFormValues) => {
     this.loading = true;
     try {
       await agent.Scenarios.update(scenario)
       runInAction(() => {
-        this.scenarioRegistry.set(scenario.id, scenario);
-        this.selectedScenario = scenario;
-        this.editMode = false;
-        this.loading = false;
+        if (scenario.id) {
+          let updatedScenario = { ...this.getScenario(scenario.id), ...scenario };
+          this.scenarioRegistry.set(scenario.id, updatedScenario as Scenario);
+          this.selectedScenario = updatedScenario as Scenario;
+        }
       })
     } catch (error) {
       console.log(error);
-      runInAction(() => this.loading = false);
     }
   }
 
@@ -125,6 +133,42 @@ export default class ScenarioStore {
       })
     }
   }
+  updateAttendeance = async () => {
+    const user = store.userStore.user;
+    this.loading = true;
+    try {
+      await agent.Scenarios.attend(this.selectedScenario!.id);
+      runInAction(() => {
+        if (this.selectedScenario?.isGoing) {
+          this.selectedScenario.attendees = this.selectedScenario.attendees?.filter(a => a.username !== user?.username);
+          this.selectedScenario.isGoing = false;
+        } else {
+          const attendee = new Profile(user!);
+          this.selectedScenario?.attendees?.push(attendee);
+          this.selectedScenario!.isGoing = true;
+        }
+        this.scenarioRegistry.set(this.selectedScenario!.id, this.selectedScenario!);
+      })
+    } catch (error) {
+      console.log(error);
+    } finally {
+      runInAction(() => this.loading = false);
+    }
+  }
 
+  cancelScenarioToggle = async () => {
+    this.loading = true;
+    try {
+      await agent.Scenarios.attend(this.selectedScenario!.id);
+      runInAction(() => {
+        this.selectedScenario!.isCancelled = !this.selectedScenario!.isCancelled;
+        this.scenarioRegistry.set(this.selectedScenario!.id, this.selectedScenario!);
+      })
+    } catch (error) {
+      console.log(error);
+    } finally {
+      runInAction(() => this.loading = false);
+    }
+  }
 
 }
