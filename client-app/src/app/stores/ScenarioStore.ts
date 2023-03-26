@@ -174,4 +174,15 @@ export default class ScenarioStore {
     this.selectedScenario = undefined;
   }
 
+  updateAttendeeFollowing = (username: string) => {
+    this.scenarioRegistry.forEach(scenario => {
+      scenario.attendees.forEach((attendee: Profile) => {
+        if (attendee.username === username) {
+          attendee.following ? attendee.followersCount-- : attendee.followersCount++;
+          attendee.following = !attendee.following;
+        }
+      })
+    })
+  }
+
 }
