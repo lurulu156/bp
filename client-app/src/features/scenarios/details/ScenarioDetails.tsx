@@ -12,12 +12,13 @@ import ScenarioDetailedSidebar from "./ScenarioDetailedSidebar";
 
 export default observer(function ScenarioDetails() {
   const { scenarioStore } = useStore();
-  const { selectedScenario: scenario, loadScenario, loadingInitial } = scenarioStore;
+  const { selectedScenario: scenario, loadScenario, loadingInitial, clearSelectedScenario } = scenarioStore;
   const { id } = useParams();
 
   useEffect(() => {
     if (id) loadScenario(id);
-  }, [id, loadScenario])
+    return () => clearSelectedScenario();
+  }, [clearSelectedScenario, id, loadScenario])
 
   if (loadingInitial || !scenario) return <LoadingComponent />;
 
@@ -26,10 +27,10 @@ export default observer(function ScenarioDetails() {
       <Grid.Column width='10'>
         <ScenarioDetailedHeader scenario={scenario} />
         <ScenarioDetailedInfo scenario={scenario} />
-        <ScenarioDetailedChat />
+        <ScenarioDetailedChat scenarioId={scenario.id} />
       </Grid.Column>
       <Grid.Column width='6'>
-        <ScenarioDetailedSidebar scenario={scenario}/>
+        <ScenarioDetailedSidebar scenario={scenario} />
       </Grid.Column>
     </Grid>
   )

@@ -170,4 +170,8 @@ export default class ScenarioStore {
     }
   }
 
+  clearSelectedScenario = () => {
+    this.selectedScenario = undefined;
+  }
+
 }
