@@ -26,7 +26,10 @@ export default observer(function ScenarioFilters() {
         />
       </Menu>
       <Header icon='calendar' attached color='teal' content='Select date' />
-      <Calendar locale="en-GB" />
+      <Calendar locale="en-GB" 
+        onChange={(date: any) => setPredicate('startDate', date as Date)}
+        value={predicate.get('startDate') || new Date()}
+      />
     </>
   );
 })
