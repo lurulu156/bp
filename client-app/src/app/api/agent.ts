@@ -4,7 +4,8 @@ import { router } from "../router/Routes";
 import { toast } from 'react-toastify';
 import { store } from "../stores/store";
 import { User, UserFormValues } from "../models/user";
-import { Photo, Profile } from "../models/profile";
+import { Photo, Profile, UserScenario } from "../models/profile";
+import { PaginatedResult } from "../models/pagination";
 
 const sleep = (delay: number) => {
   return new Promise((resolve) => {
@@ -24,6 +25,11 @@ axios.interceptors.request.use(config => {
 
 axios.interceptors.response.use(async response => {
   await sleep(1000);
+  const pagination = response.headers['pagination'];
+  if (pagination) {
+    response.data = new PaginatedResult(response.data, JSON.parse(pagination));
+    return response as AxiosResponse<PaginatedResult<any>>
+  }
   return response;
 }, (error: AxiosError) => {
   const { data, status, config } = error.response as AxiosResponse;
@@ -80,7 +86,9 @@ const Profiles = {
   updateProfile: (profile: Partial<Profile>) => requests.put(`/profiles`, profile),
   updateFollowing: (username: string) => requests.post(`/follow/${username}`, {}),
   listFollowings: (username: string, predicate: string) => requests
-    .get<Profile[]>(`/follow/${username}?predicate=${predicate}`)
+    .get<Profile[]>(`/follow/${username}?predicate=${predicate}`),
+  listScenarios: (username: string, predicate: string) =>
+    requests.get<UserScenario[]>(`/profiles/${username}/scenarios?predicate=${predicate}`)
 }
 
 const requests = {
@@ -91,7 +99,8 @@ const requests = {
 }
 
 const Scenarios = {
-  list: () => requests.get<Scenario[]>(`/scenarios`),
+  list: (params: URLSearchParams) => axios.get<PaginatedResult<Scenario[]>>('/scenarios', { params })
+    .then(responseBody),
   details: (id: string) => requests.get<Scenario>(`/scenarios/${id}`),
   create: (scenario: ScenarioFormValues) => requests.post<void>(`/scenarios`, scenario),
   update: (scenario: ScenarioFormValues) => requests.put<void>(`/scenarios/${scenario.id}`, scenario),

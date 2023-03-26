@@ -1,4 +1,4 @@
-import { Photo, Profile } from "../models/profile";
+import { Photo, Profile, UserScenario } from "../models/profile";
 import { makeAutoObservable, reaction, runInAction } from "mobx";
 import agent from "../api/agent";
 import { toast } from "react-toastify";
@@ -12,6 +12,8 @@ export default class ProfileStore {
   followings: Profile[] = [];
   loadingFollowings = false;
   activeTab: number = 0;
+  userScenarios: UserScenario[] = [];
+  loadingScenarios = false;
 
   constructor() {
     makeAutoObservable(this);
@@ -169,6 +171,22 @@ export default class ProfileStore {
     } catch (error) {
       console.log(error);
       runInAction(() => this.loadingFollowings = false);
+    }
+  }
+
+  loadUserScenarios = async (username: string, predicate?: string) => {
+    this.loadingScenarios = true;
+    try {
+      const scenarios = await agent.Profiles.listScenarios(username, predicate!);
+      runInAction(() => {
+        this.userScenarios = scenarios;
+        this.loadingScenarios = false;
+      })
+    } catch (error) {
+      console.log(error);
+      runInAction(() => {
+        this.loadingScenarios = false;
+      })
     }
   }
 }

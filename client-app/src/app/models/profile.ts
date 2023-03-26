@@ -28,3 +28,10 @@ export interface Photo {
   url: string;
   isMain: boolean;
 }
+
+export interface UserScenario {
+  id: string;
+  title: string;
+  category: string;
+  dueDate: Date;
+}
