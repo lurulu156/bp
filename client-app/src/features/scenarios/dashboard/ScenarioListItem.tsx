@@ -19,7 +19,7 @@ export default function ScenarioListItem({ scenario }: Props) {
               <Item.Header as={Link} to={`/scenarios/${scenario.id}`}>
                 {scenario.title}
               </Item.Header>
-              <Item.Description>Hosted by {scenario.host?.displayName}</Item.Description>
+              <Item.Description>Hosted by <Link to={`/profiles/${scenario.hostUsername}`}>{scenario.host?.displayName}</Link></Item.Description>
               {scenario.isHost && (
                 <Item.Description>
                   <Label basic color='orange'>

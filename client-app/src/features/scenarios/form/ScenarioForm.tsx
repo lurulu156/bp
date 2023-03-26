@@ -16,7 +16,7 @@ import MyTextArea from "../../../app/common/form/MyTextArea";
 
 export default observer(function ScenarioForm() {
   const { scenarioStore } = useStore();
-  const { createScenario, updateScenario, loading, loadScenario, loadingInitial } = scenarioStore;
+  const { createScenario, updateScenario, loadScenario, loadingInitial } = scenarioStore;
   const { id } = useParams();
   const navigate = useNavigate();
   const [scenario, setScenario] = useState<ScenarioFormValues>(new ScenarioFormValues());

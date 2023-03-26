@@ -7,6 +7,7 @@ export interface Profile {
   bio?: string;
   department: string;
   title: string;
+  photos?: Photo[]
 }
 
 export class Profile implements Profile {
@@ -17,4 +18,10 @@ export class Profile implements Profile {
     this.department = user.department;
     this.title = user.title;
   }
+}
+
+export interface Photo {
+  id: string;
+  url: string;
+  isMain: boolean;
 }
