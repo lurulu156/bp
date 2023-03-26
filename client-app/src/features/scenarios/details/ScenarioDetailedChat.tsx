@@ -32,7 +32,7 @@ export default observer(function ScenarioDetailedChat({ scenarioId }: Props) {
         color='teal'
         style={{ border: 'none' }}
       >
-        <Header>Chat about this scenario</Header>
+        <Header>Feedback about this scenario</Header>
       </Segment>
       <Segment attached clearing>
         <Formik

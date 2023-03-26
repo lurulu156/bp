@@ -14,7 +14,7 @@ export default function ScenarioListItem({ scenario }: Props) {
       <Segment>
         <Item.Group>
           <Item>
-            <Item.Image size='tiny' circular src='/assets/user.png' />
+            <Item.Image size='tiny' circular src={scenario.host?.image || '/assets/user.png'} />
             <Item.Content>
               <Item.Header as={Link} to={`/scenarios/${scenario.id}`}>
                 {scenario.title}

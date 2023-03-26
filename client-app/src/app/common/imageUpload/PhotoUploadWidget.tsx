@@ -45,10 +45,14 @@ export default observer(function PhotoUploadWidget({ loading, uploadPhoto }: Pro
         <Grid.Column width={4}>
           <Header sub color='teal' content='Step 3 - Preview & Upload' />
           <div className="img-preview" style={{ minHeight: 200, overflow: 'hidden' }} />
-          <Button.Group widths={2}>
-            <Button loading={loading} onClick={onCrop} positive icon='check' />
-            <Button disabled={loading} onClick={() => setFiles([])} icon='close' />
-          </Button.Group>
+          {files && files.length > 0 && (
+            <>
+              <Button.Group widths={2}>
+                <Button loading={loading} onClick={onCrop} positive icon='check' />
+                <Button disabled={loading} onClick={() => setFiles([])} icon='close' />
+              </Button.Group>
+            </>
+          )}
         </Grid.Column>
       </Grid>
     </>
