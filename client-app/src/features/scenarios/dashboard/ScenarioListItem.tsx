@@ -2,18 +2,21 @@ import { Link } from "react-router-dom";
 import { Item, Button, Icon, Segment, Label } from "semantic-ui-react";
 import { Scenario } from "../../../app/models/scenario";
 import { format } from "date-fns";
+import { observer } from 'mobx-react-lite';
 import ScenarioListItemAttendee from "./ScenarioListItemAttendee";
 
 interface Props {
   scenario: Scenario
 }
 
-export default function ScenarioListItem({ scenario }: Props) {
+export default observer(function ScenarioListItem({ scenario }: Props) {
   return (
     <Segment.Group>
       <Segment>
         <Item.Group>
           <Item>
+            {scenario.isCancelled &&
+              <Label attached="top" color="red" content={`${scenario.title} is Cancelled`} style={{ textAlign: 'center' }} />}
             <Item.Image size='tiny' circular src={scenario.host?.image || '/assets/user.png'} />
             <Item.Content>
               <Item.Header as={Link} to={`/scenarios/${scenario.id}`}>
@@ -60,4 +63,4 @@ export default function ScenarioListItem({ scenario }: Props) {
       </Segment>
     </Segment.Group>
   )
-}
+})

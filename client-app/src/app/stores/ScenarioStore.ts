@@ -173,6 +173,7 @@ export default class ScenarioStore {
           this.selectedScenario = updatedScenario as Scenario;
         }
       })
+      this.loading = false;
     } catch (error) {
       console.log(error);
     }

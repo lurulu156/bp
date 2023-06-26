@@ -83,6 +83,7 @@ export default class ProfileStore {
     try {
       await agent.Profiles.setMainPhoto(photo.id);
       store.userStore.setImage(photo.url);
+      await store.scenarioStore.loadScenarios();
       runInAction(() => {
         if (this.profile && this.profile.photos) {
           this.profile.photos.find(a => a.isMain)!.isMain = false;

@@ -64,9 +64,8 @@ export default observer(function ScenarioForm() {
             <MyDateInput name='dueDate' placeholderText='Due Date' showTimeSelect timeCaption='time' dateFormat='MMMM d, yyyy h:mm aa' />
 
             <Header content='Other Details' sub color='teal' />
-            <MyTextInput name='fileLink' placeholder='File Link' />
+            <MyTextInput name='file' placeholder='File Link' />
             <MyTextInput name='bpCycle' placeholder='BP Cycle' />
-
             <Button
               disabled={isSubmitting || !dirty || !isValid}
               loading={isSubmitting}
