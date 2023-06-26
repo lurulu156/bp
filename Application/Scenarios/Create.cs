@@ -33,7 +33,7 @@ namespace Application.Scenarios
       public async Task<Result<Unit>> Handle(Command request, CancellationToken cancellationToken)
       {
         var user = await _context.Users.FirstOrDefaultAsync(x => x.UserName == _userAccessor.GetUsername());
-
+        request.Scenario.DueDate = request.Scenario.DueDate.Add(TimeZoneInfo.Local.GetUtcOffset(request.Scenario.DueDate));
         var attendee = new ScenarioAttendee
         {
           AppUser = user,
