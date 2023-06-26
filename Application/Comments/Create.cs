@@ -37,8 +37,7 @@ namespace Application.Comments
 
         if (scenario == null) return null;
 
-        var user = await _context.Users.FirstOrDefaultAsync(x => x.UserName == _userAccessor.GetUsername());
-
+        var user = await _context.Users.Include(p => p.Photos).FirstOrDefaultAsync(x => x.UserName == _userAccessor.GetUsername());
         var comment = new Comment
         {
           Author = user,
