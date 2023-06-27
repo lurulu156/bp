@@ -6,7 +6,6 @@ import ProfilePage from "../../features/profiles/ProfilePage";
 import ScenarioDashboard from "../../features/scenarios/dashboard/ScenarioDashboard";
 import ScenarioDetails from "../../features/scenarios/details/ScenarioDetails";
 import ScenarioForm from "../../features/scenarios/form/ScenarioForm";
-import LoginForm from "../../features/users/LoginForm";
 import App from "../layout/App";
 import RequireAuth from "./RequireAuth";
 
