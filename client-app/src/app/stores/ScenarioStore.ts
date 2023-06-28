@@ -86,21 +86,6 @@ export default class ScenarioStore {
     )
   }
 
-  computeScenariosByDate() {
-    return Array.from(this.scenarioRegistry.values()).sort((a, b) =>
-      a.dueDate!.getTime() - b.dueDate!.getTime());
-  }
-
-  computedGroupedScenarios(): [string, Scenario[]][] {
-    return Object.entries(
-      this.scenariosByDate.reduce((scenarios, scenario) => {
-        const bpCycle = scenario.bpCycle
-        scenarios[bpCycle] = scenarios[bpCycle] ? [...scenarios[bpCycle], scenario] : [scenario];
-        return scenarios;
-      }, {} as { [key: string]: Scenario[] })
-    )
-  }
-
   private setScenario = (scenario: Scenario) => {
     const user = store.userStore.user;
     if (user) {
@@ -125,8 +110,6 @@ export default class ScenarioStore {
       result.data.forEach(scenario => {
         this.setScenario(scenario);
       })
-      this.computeScenariosByDate();
-      this.computedGroupedScenarios();
       this.setPagination(result.pagination);
       this.setLoadingInitial(false);
     } catch (error) {
