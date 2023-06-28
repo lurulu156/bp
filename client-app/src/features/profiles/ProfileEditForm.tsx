@@ -16,7 +16,9 @@ export default observer(function ProfileEditForm({ setEditMode }: Props) {
     <Formik
       initialValues={{
         displayName: profile?.displayName,
-        bio: profile?.bio || ''
+        bio: profile?.bio || '',
+        title: profile?.title || '',
+        department: profile?.department || '',
       }}
       onSubmit={values => {
         updateProfile(values).then(() => {
@@ -31,6 +33,14 @@ export default observer(function ProfileEditForm({ setEditMode }: Props) {
           <MyTextInput
             placeholder='Display Name'
             name='displayName'
+          />
+          <MyTextInput
+            placeholder='Title'
+            name='title'
+          />
+          <MyTextInput
+            placeholder='Department'
+            name='department'
           />
           <MyTextArea rows={3} placeholder='Add your bio' name='bio' />
           <Button
