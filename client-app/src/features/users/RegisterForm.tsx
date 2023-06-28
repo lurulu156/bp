@@ -10,21 +10,25 @@ export default observer(function RegsiterForm() {
   const { userStore } = useStore();
   return (
     <Formik
-      initialValues={{ displayName: '', username: '', email: '', password: '', error: null }}
+      initialValues={{ displayName: '', username: '', title: '', department: '', email: '', password: '', error: null }}
       onSubmit={(values, { setErrors }) =>
         userStore.register(values).catch(error => setErrors({ error: error }))}
       validationSchema={Yup.object({
         displayName: Yup.string().required(),
         username: Yup.string().required(),
+        title: Yup.string().required(),
+        department: Yup.string().required(),
         email: Yup.string().required(),
         password: Yup.string().required(),
       })}
     >
       {({ handleSubmit, isSubmitting, errors, isValid, dirty }) => (
         <Form className='ui form error' onSubmit={handleSubmit} autoComplete='off'>
-          <Header as='h2' content='Sign up to Reactivities' color="teal" textAlign="center" />
+          <Header as='h2' content='Sign up to Business Process' color="teal" textAlign="center" />
           <MyTextInput placeholder="Display Name" name='displayName' />
           <MyTextInput placeholder="Username" name='username' />
+          <MyTextInput placeholder="Title" name='title' />
+          <MyTextInput placeholder="Department" name='department' />
           <MyTextInput placeholder="Email" name='email' />
           <MyTextInput placeholder="Password" name='password' type='password' />
           <ErrorMessage name='error' render={() =>
