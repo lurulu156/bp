@@ -1,6 +1,6 @@
 export const categoryOptions = [
-  { text: 'Capacity', value: 'capacity' },
-  { text: 'Cost', value: 'cost' },
-  { text: 'Facility', value: 'facility' },
-  { text: 'Technode', value: 'technode' }
+  { text: 'Capacity', value: 'Capacity' },
+  { text: 'Cost', value: 'Cost' },
+  { text: 'Facility', value: 'Facility' },
+  { text: 'Technode', value: 'Technode' }
 ]
