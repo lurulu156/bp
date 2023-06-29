@@ -247,4 +247,21 @@ export default class ScenarioStore {
     })
   }
 
+  updateAttendeeProfile = (username: string) => {
+    this.scenarioRegistry.forEach(scenario => {
+      scenario.attendees.forEach((attendee: Profile) => {
+        if (attendee.username === username) {
+          attendee.bio = store.profileStore.profile?.bio
+          attendee.displayName = store.profileStore.profile?.displayName!
+          attendee.image = store.userStore.user?.image
+        }
+      })
+    })
+  }
+  updateHostImage = (username: string) => {
+    this.scenarioRegistry.forEach(scenario => {
+      if (scenario.host?.username === username) scenario.host!.image = store.userStore.user?.image;
+    })
+  }
+
 }

@@ -68,7 +68,8 @@ export default class ProfileStore {
           if (photo.isMain && store.userStore.user) {
             store.userStore.setImage(photo.url);
             this.profile.image = photo.url;
-            window.location.reload();
+            store.scenarioStore.updateHostImage(store.userStore.user!.username);
+            store.scenarioStore.updateAttendeeProfile(store.userStore.user!.username);
           }
         }
         this.uploading = false;
@@ -84,12 +85,13 @@ export default class ProfileStore {
     try {
       await agent.Profiles.setMainPhoto(photo.id);
       store.userStore.setImage(photo.url);
+      store.scenarioStore.updateHostImage(store.userStore.user!.username);
+      store.scenarioStore.updateAttendeeProfile(store.userStore.user!.username);
       runInAction(() => {
         if (this.profile && this.profile.photos) {
           this.profile.photos.find(a => a.isMain)!.isMain = false;
           this.profile.photos.find(a => a.id === photo.id)!.isMain = true;
           this.profile.image = photo.url;
-          window.location.reload();
           this.loading = false;
         }
       })
@@ -123,8 +125,11 @@ export default class ProfileStore {
         if (profile.displayName && profile.displayName !==
           store.userStore.user?.displayName) {
           store.userStore.setDisplayName(profile.displayName);
+          store.userStore.setDepartment(profile.department!);
+          store.userStore.setTitle(profile.title!);
         }
         this.profile = { ...this.profile, ...profile as Profile };
+        store.scenarioStore.updateAttendeeProfile(store.userStore.user!.username);
         this.loading = false;
       })
     } catch (error) {

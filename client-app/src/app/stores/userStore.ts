@@ -66,4 +66,12 @@ export default class UserStore {
   setDisplayName = (name: string) => {
     if (this.user) this.user.displayName = name;
   }
+
+  setDepartment = (department: string) => {
+    if (this.user) this.user.department = department;
+  }
+
+  setTitle = (title: string) => {
+    if (this.user) this.user.title = title;
+  }
 }
