@@ -50,6 +50,9 @@ if (app.Environment.IsDevelopment())
 }
 else
 {
+  app.UseSwagger();
+  app.UseSwaggerUI();
+  
   app.Use(async (context, next) =>
   {
     context.Response.Headers.Add("Strict-Transport-Security", "max-age=31536000");

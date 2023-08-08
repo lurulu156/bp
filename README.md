@@ -1,6 +1,8 @@
 # Business Process Scenario App
 A platform for Business Process Scenario communication.
-![GIF](./public/bpdemo.GIF)
+<div align="center">
+  <img src="./public/bpdemo.gif" alt="Business Process Demo" width="70%">
+</div>
 
 ## Features
 The Business Process Scenario App is a communication platform designed to facilitate discussions and collaboration around each Business Process (BP) cycle's scenarios. It serves as a central hub for users to create, view, and manage scenarios, follow other users and update personal information. The app aims to streamline the process of scenario communication and enhance user engagement.
